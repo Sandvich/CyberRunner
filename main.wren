@@ -13,7 +13,7 @@ class Game {
         Window.title = "CyberRunner"
         // The game should be pretty lightweight, so enabling this.
         Window.lockstep = true
-        // Window.resize() <- we'll see
+        Window.resize(800, 600)
 
         // Open the menu
         Menu.run()
