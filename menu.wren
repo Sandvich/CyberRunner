@@ -1,6 +1,6 @@
-import "graphics" for Canvas, Color, ImageData, Point
+import "graphics" for Canvas, ImageData
 import "io" for FileSystem
-import "./api" for Sprite
+import "./api" for Sprite, Button
 
 class Menu {
     construct init () {
@@ -10,14 +10,14 @@ class Menu {
         _background.draw(0, 0)
 
         // Construct the menu
-        _buttons = {
-            "start": Sprite.new("res/start_button.png", true),
-            "quit": Sprite.new("res/quit_button.png", true)
-        }
+        _buttons = [
+            Button.new("res/start_button.png", "start pressed", true),
+            Button.new("res/quit_button.png", "quit pressed", true)
+        ]
 
         var y = 300
-        for (button in _buttons.keys) {
-            _buttons[button].draw(400, y)
+        for (button in _buttons) {
+            button.draw(400, y)
             y = y + 100
         }
     }

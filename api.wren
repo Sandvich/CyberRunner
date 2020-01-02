@@ -1,21 +1,18 @@
-import "graphics" for Canvas, ImageData, Point
+import "graphics" for ImageData, Point
 // A set of common classes that we can use to make life easier
 
 class Sprite {
     // An image that can be displayed on the screen.
     construct new(filename, center) {
         _center = center
-        setImage(filename)
+        sprite = filename
     }
-
     construct new(filename) {
         _center = false
-        setImage(filename)
+        sprite = filename
     }
 
-    setImage(filename) {
-        _sprite = ImageData.loadFromFile(filename)
-    }
+    sprite=(filename) { _sprite = ImageData.loadFromFile(filename) }
 
     draw (x, y) {
         if (_center) {
@@ -24,10 +21,35 @@ class Sprite {
         }
 
         _sprite.draw(x, y)
+        // Store this so that we know the co-ordinates that refer to this sprite
+        _loc = Point.new(x, y)
     }
 }
 
 class Button is Sprite {
     // An interactable button, including a sprite.
+    construct new(image, action, center) {
+        super(image, center)
+        this.action = action
+    }
+    construct new(image, action) {
+        super(image, false)
+        this.action = action
+    }
 
+    action=(function) {
+        if (function is Fn) {
+            _action = function
+        } else {
+            _action = Fn.new { System.print(function) }
+        }
+    }
+
+    onClick() {
+        _action.call()
+    }
+
+    draw (x, y) {
+        super(x,y)
+    }
 }
