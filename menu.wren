@@ -1,5 +1,6 @@
 import "graphics" for Canvas, Color, ImageData, Point
 import "io" for FileSystem
+import "./api" for Sprite
 
 class Menu {
     construct init () {
@@ -10,13 +11,13 @@ class Menu {
 
         // Construct the menu
         _buttons = {
-            "start": ImageData.loadFromFile("res/start_button.png"),
-            "quit": ImageData.loadFromFile("res/quit_button.png")
+            "start": Sprite.new("res/start_button.png", true),
+            "quit": Sprite.new("res/quit_button.png", true)
         }
 
         var y = 300
         for (button in _buttons.keys) {
-            _buttons[button].draw(300, y)
+            _buttons[button].draw(400, y)
             y = y + 100
         }
     }
