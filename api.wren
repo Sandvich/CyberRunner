@@ -24,6 +24,12 @@ class Sprite {
         // Store this so that we know the co-ordinates that refer to this sprite
         _loc = Point.new(x, y)
     }
+
+    getSize() {
+        if (_loc != null) {
+            return [_loc, Point.new(_loc.x + _sprite.width, _loc.y + _sprite.height)]
+        }
+    }
 }
 
 class Button is Sprite {
@@ -47,9 +53,5 @@ class Button is Sprite {
 
     onClick() {
         _action.call()
-    }
-
-    draw (x, y) {
-        super(x,y)
     }
 }

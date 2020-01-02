@@ -1,5 +1,6 @@
 import "audio" for AudioEngine
 import "dome" for Window
+import "input" for Mouse
 import "./menu" for Menu
 
 // =================
@@ -16,9 +17,13 @@ class Game {
         Window.resize(800, 600)
 
         // Open the menu
-        Menu.run()
+        __currentScreen = Menu.run()
     }
-    static update() {}
+    static update() {
+        if (Mouse.isButtonPressed("left")) {
+            __currentScreen.clickHandler("left", Mouse.x, Mouse.y)
+        }
+    }
     static draw(dt) {}
 }
 
