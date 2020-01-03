@@ -1,18 +1,23 @@
+import "dome" for Process
 import "graphics" for Canvas, ImageData
-import "io" for FileSystem
-import "./api" for Sprite, Button
+import "input" for Mouse
+import "./api" for Sprite, Button, Scene
 
-class Menu {
+class Menu is Scene {
     construct init () {
         // Set up the background
         _background = ImageData.loadFromFile("res/gridbg.png")
         Canvas.resize(_background.width, _background.height)
         _background.draw(0, 0)
 
+        // Create the functions used for the menu
+        var startPressed = Fn.new { System.print("Pressed the start button") }
+        var quitPressed = Fn.new { Process.exit() }
+
         // Construct the menu
         _buttons = [
-            Button.new("res/start_button.png", "start pressed", true),
-            Button.new("res/quit_button.png", "quit pressed", true)
+            Button.new("res/start_button.png", startPressed, true),
+            Button.new("res/quit_button.png", quitPressed, true)
         ]
 
         var y = 300
@@ -22,23 +27,18 @@ class Menu {
         }
     }
 
-    clickHandler(mouseButton, x, y) {
-        // The only things to click on in this scene are held in _buttons
-        // So iterate over them and check if the mouse is over any
+    mouseHandler() {
         for (item in _buttons) {
             var size = item.getSize()
-            if ( (size[0].x <= x) && (size[0].y <= y) && (size[1].x >= x) && (size[1].y >= y) ) {
-                item.onClick()
-                // Break here to avoid evaluating every button on every click
-                break
+            if ( (size[0].x <= Mouse.x) && (size[0].y <= Mouse.y) && (size[1].x >= Mouse.x) && (size[1].y >= Mouse.y) ) {
+                item.onHover()
+                if (Mouse.isButtonPressed("left")) item.onClick()
             }
         }
     }
 
-    static run () {
-        // We use the static function run for all scenes instead of their constructors,
-        // as this means that when we're done with the scene all memory associated with
-        // it is freed automatically.
+    // Boilerplate + functions
+    static run() { 
         return init()
     }
 }

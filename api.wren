@@ -54,4 +54,25 @@ class Button is Sprite {
     onClick() {
         _action.call()
     }
+
+    onHover() {
+        System.print("Hovering!")
+    }
+}
+
+class Scene {
+    // The core class for scenes. Will do nothing on its own, subclass it to create a scene.
+
+    construct init() {}
+
+    static run() {
+        // We use the static function run for all scenes instead of their constructors,
+        // as this means that when we're done with the scene all memory associated with
+        // it is freed automatically.
+        return init()
+    }
+
+    mouseHandler() {}
+    keyboardHandler() {}
+    gamepadHandler() {}
 }
