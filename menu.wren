@@ -1,30 +1,44 @@
-import "graphics" for Canvas, Color, ImageData, Point
-import "io" for FileSystem
+import "dome" for Process
+import "graphics" for Canvas, ImageData
+import "input" for Mouse
+import "./api" for Sprite, Button, Scene
 
-class Menu {
+class Menu is Scene {
     construct init () {
         // Set up the background
         _background = ImageData.loadFromFile("res/gridbg.png")
         Canvas.resize(_background.width, _background.height)
         _background.draw(0, 0)
 
+        // Create the functions used for the menu
+        var startPressed = Fn.new { System.print("Pressed the start button") }
+        var quitPressed = Fn.new { Process.exit() }
+
         // Construct the menu
-        _buttons = {
-            "start": ImageData.loadFromFile("res/start_button.png"),
-            "quit": ImageData.loadFromFile("res/quit_button.png")
-        }
+        _buttons = [
+            Button.new("res/start_button.png", startPressed, true),
+            Button.new("res/quit_button.png", quitPressed, true)
+        ]
 
         var y = 300
-        for (button in _buttons.keys) {
-            _buttons[button].draw(300, y)
-            y = y + 100
+        for (button in _buttons) {
+            button.draw(400, y)
+            y = y + 50
         }
     }
 
-    static run () {
-        // We use the static function run for all scenes instead of their constructors,
-        // as this means that when we're done with the scene all memory associated with
-        // it is freed automatically.
-        init()
-    }    
+    mouseHandler() {
+        for (item in _buttons) {
+            var size = item.getSize()
+            if ( (size[0].x <= Mouse.x) && (size[0].y <= Mouse.y) && (size[1].x >= Mouse.x) && (size[1].y >= Mouse.y) ) {
+                item.onHover()
+                if (Mouse.isButtonPressed("left")) item.onClick()
+            }
+        }
+    }
+
+    // Boilerplate + functions
+    static run() { 
+        return init()
+    }
 }

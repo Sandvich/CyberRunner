@@ -16,9 +16,15 @@ class Game {
         Window.resize(800, 600)
 
         // Open the menu
-        Menu.run()
+        __currentScreen = Menu.run()
     }
-    static update() {}
+
+    static update() {
+        __currentScreen.mouseHandler()
+        __currentScreen.keyboardHandler()
+        __currentScreen.gamepadHandler()
+    }
+    
     static draw(dt) {}
 }
 
