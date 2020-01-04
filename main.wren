@@ -25,6 +25,8 @@ class Game {
         __currentScreen.gamepadHandler()
     }
     
-    static draw(dt) {}
+    static draw(dt) {
+        __currentScreen.draw(dt)
+    }
 }
 

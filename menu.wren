@@ -6,11 +6,13 @@ import "./api" for Sprite, Button, Scene
 class Menu is Scene {
     construct init () {
         // Set up the background
+        setupDrawLoop()
         _background = ImageData.loadFromFile("res/gridbg.png")
         Canvas.resize(_background.width, _background.height)
-        _background.draw(0, 0)
+        addCanvasItem(_background, 0, 0)
 
         // Create the functions used for the menu
+        var cursor = Sprite.new("res/arrow.png", false)
         var startPressed = Fn.new { System.print("Pressed the start button") }
         var quitPressed = Fn.new { Process.exit() }
 
@@ -22,9 +24,12 @@ class Menu is Scene {
 
         var y = 300
         for (button in _buttons) {
-            button.draw(400, y)
+            addCanvasItem(button, 400, y)
+            button.hover = Fn.new { addTempCanvasItem(cursor, 295, button.getSize()[0].y + 10) }
             y = y + 50
         }
+
+        draw(0)
     }
 
     mouseHandler() {
