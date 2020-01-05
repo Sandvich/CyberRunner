@@ -15,3 +15,4 @@ If you're running Windows, the SDL library is bundled with the dome executable, 
 * [Menu background](https://opengameart.org/content/grid-background)
 * [Menu Text](https://maketext.io/)
 * [Cursor Arrow](https://opengameart.org/content/glow-arrow)
+* [Menu Music](https://opengameart.org/content/bluebeat-01-loop-cyberpunk-lab-music)

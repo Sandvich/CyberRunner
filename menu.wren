@@ -1,3 +1,4 @@
+import "audio" for AudioEngine
 import "dome" for Process
 import "graphics" for Canvas, ImageData
 import "input" for Mouse
@@ -13,7 +14,7 @@ class Menu is Scene {
 
         // Create the functions used for the menu
         var cursor = Sprite.new("res/arrow.png", false)
-        var startPressed = Fn.new { System.print("Pressed the start button") }
+        var startPressed = Fn.new { System.print("Channel %(_channelID) is playing: %(AudioEngine.isPlaying(_channelID))") }
         var quitPressed = Fn.new { Process.exit() }
 
         // Construct the menu
@@ -29,6 +30,12 @@ class Menu is Scene {
             y = y + 50
         }
 
+        // Load and play the background music
+        AudioEngine.load("menu", "res/bluebeat.ogg")
+        _channelID = AudioEngine.play("menu")
+        AudioEngine.setChannelLoop(_channelID, true)
+
+        // Needs to be done manually once, to ensure that everything is set up.
         draw(0)
     }
 
