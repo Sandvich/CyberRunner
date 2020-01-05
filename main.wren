@@ -16,7 +16,7 @@ class Game {
         Window.resize(800, 600)
 
         // Open the menu
-        __currentScreen = Menu.run()
+        __currentScreen = Menu.run(this)
     }
 
     static update() {
@@ -28,6 +28,13 @@ class Game {
     
     static draw(dt) {
         __currentScreen.draw(dt)
+    }
+
+    static loadScene(sceneClass) {
+        System.print("Tried to load %(sceneClass)!")
+        if (sceneClass is Class) {
+            __currentScreen = sceneClass.run(this)
+        }
     }
 }
 

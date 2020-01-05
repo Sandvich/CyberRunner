@@ -5,7 +5,8 @@ import "input" for Mouse
 import "./api" for Sprite, Button, Scene
 
 class Menu is Scene {
-    construct init () {
+    construct init (parent) {
+        _parent = parent
         // Set up the window and load in the files we need.
         setupDrawLoop()
         _background = ImageData.loadFromFile("res/gridbg.png")
@@ -28,7 +29,7 @@ class Menu is Scene {
         addCanvasItem(_background, 0, 0)
 
         // Create the functions used for the menu
-        var startPressed = Fn.new { System.print("Starting game! Except not, because there's no game yet.") }
+        var startPressed = Fn.new { _parent.loadScene("Main game scene") }
         var settingsPressed = Fn.new { drawSettingsMenu() }
         var quitPressed = Fn.new { Process.exit() }
 
@@ -95,7 +96,7 @@ class Menu is Scene {
     }
 
     // Boilerplate + functions
-    static run() { 
-        return init()
+    static run(parent) {
+        return init(parent)
     }
 }
