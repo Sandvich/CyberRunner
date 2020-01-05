@@ -3,22 +3,27 @@ import "dome" for Process
 import "graphics" for Canvas, ImageData
 import "input" for Mouse
 import "./api" for Sprite, Button, Scene
+import "./game" for GameLevel
 
 class Menu is Scene {
     construct init (parent) {
         _parent = parent
+        AudioEngine.stopAllChannels()
+
         // Set up the window and load in the files we need.
         setupDrawLoop()
         _background = Sprite.new("res/gridbg.png")
         _title = Sprite.new("res/title.png", true)
         Canvas.resize(_background.width, _background.height)
         _cursor = Sprite.new("res/arrow.png", false)
+        _prefs = parent.loadPrefs()
 
         // Load and play the background music
         AudioEngine.load("menu", "res/bluebeat.ogg")
-        _channelID = AudioEngine.play("menu")
-        AudioEngine.setChannelLoop(_channelID, true)
-        _mute = false
+        if (!_prefs["mute"]) {
+            _channelID = AudioEngine.play("menu")
+            AudioEngine.setChannelLoop(_channelID, true)
+        }
 
         // Needs to be done manually once, to ensure that everything is set up.
         drawMainMenu()
@@ -27,7 +32,7 @@ class Menu is Scene {
 
     drawMainMenu() {
         // Create the functions used for the menu
-        var startPressed = Fn.new { _parent.loadScene("Game") }
+        var startPressed = Fn.new { _parent.loadScene(GameLevel) }
         var settingsPressed = Fn.new { drawSettingsMenu() }
         var quitPressed = Fn.new { Process.exit() }
 
@@ -47,12 +52,13 @@ class Menu is Scene {
         var mutePressed = Fn.new { 
             if (AudioEngine.isPlaying(_channelID)) {
                 AudioEngine.stopAllChannels()
-                _mute = true
+                _prefs["mute"] = true
             } else {
                 _channelID = AudioEngine.play("menu")
                 AudioEngine.setChannelLoop(_channelID, true)
-                _mute = false
+                _prefs["mute"] = false
             }
+            _parent.savePrefs(_prefs)
             drawSettingsMenu()
         }
 
@@ -60,7 +66,7 @@ class Menu is Scene {
 
         // Fill the button list
         var mute_img
-        if (_mute) {
+        if (_prefs["mute"]) {
             mute_img = "res/mute_active_button.png"
         } else {
             mute_img = "res/mute_button.png"

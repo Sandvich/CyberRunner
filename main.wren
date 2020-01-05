@@ -1,5 +1,6 @@
 import "audio" for AudioEngine
 import "dome" for Window
+import "io" for FileSystem
 import "./menu" for Menu
 
 // =================
@@ -35,6 +36,49 @@ class Game {
         if (sceneClass is Class) {
             __currentScreen = sceneClass.run(this)
         }
+    }
+
+    static loadPrefs() {
+        var loaded = null
+        var loadFiber = Fiber.new {
+            loaded = FileSystem.load("preferences")
+        }
+        loadFiber.try()
+
+        if (loaded == null) { // Give a default set of prefs
+            System.print("Couldn't find save file")
+            return {
+            "mute": 0,
+            "volume": 1.0,
+            "difficulty": 0,
+            "high": 0
+            }
+        } else { // Parse the string we loaded
+            System.print("Loading file: %(loaded)")
+            var listString = loaded.split("\n")
+            var prefs = {}
+            for (item in listString) {
+                if (item.contains(":")) {
+                    // I'm so sorry
+                    var pair = item.split(":")
+                    prefs[pair[0]] = Num.fromString(pair[1])
+                    if (prefs[pair[0]] == null) {
+                        // This is a ludicrous indentation level
+                        if (pair[1] == "true") { prefs[pair[0]] = true }
+                        // I promise it won't happen again.
+                    }
+                }
+            }
+            return prefs
+        }
+    }
+
+    static savePrefs(prefs) {
+        var output = ""
+        for (item in prefs.keys) {
+            output = output + "%(item):%(prefs[item])\n"
+        }
+        FileSystem.save("preferences", output)
     }
 }
 
