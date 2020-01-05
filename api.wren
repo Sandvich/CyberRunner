@@ -103,6 +103,7 @@ class Scene {
 
     addCanvasItem(item, x, y) { _toDraw.add([item, Point.new(x,y)]) }
     addTempCanvasItem(item, x, y) { _tempDraw.add([item, Point.new(x,y)]) }
+    clearCanvasItems() { setupDrawLoop() } // Really just a convenience.
 
     mouseHandler() {}
     keyboardHandler() {}

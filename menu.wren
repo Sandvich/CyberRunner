@@ -6,15 +6,28 @@ import "./api" for Sprite, Button, Scene
 
 class Menu is Scene {
     construct init () {
-        // Set up the background
+        // Set up the window and load in the files we need.
         setupDrawLoop()
         _background = ImageData.loadFromFile("res/gridbg.png")
         Canvas.resize(_background.width, _background.height)
+        _cursor = Sprite.new("res/arrow.png", false)
+
+        // Load and play the background music
+        AudioEngine.load("menu", "res/bluebeat.ogg")
+        _channelID = AudioEngine.play("menu")
+        AudioEngine.setChannelLoop(_channelID, true)
+
+        // Needs to be done manually once, to ensure that everything is set up.
+        drawMainMenu()
+        draw(0)
+    }
+
+    drawMainMenu() {
+        clearCanvasItems()
         addCanvasItem(_background, 0, 0)
 
         // Create the functions used for the menu
-        var cursor = Sprite.new("res/arrow.png", false)
-        var startPressed = Fn.new { System.print("Channel %(_channelID) is playing: %(AudioEngine.isPlaying(_channelID))") }
+        var startPressed = Fn.new { drawSettingsMenu() }
         var quitPressed = Fn.new { Process.exit() }
 
         // Construct the menu
@@ -26,17 +39,33 @@ class Menu is Scene {
         var y = 300
         for (button in _buttons) {
             addCanvasItem(button, 400, y)
-            button.hover = Fn.new { addTempCanvasItem(cursor, 295, button.getSize()[0].y + 10) }
+            button.hover = Fn.new { addTempCanvasItem(_cursor, 295, button.getSize()[0].y + 10) }
             y = y + 50
         }
+    }
 
-        // Load and play the background music
-        AudioEngine.load("menu", "res/bluebeat.ogg")
-        _channelID = AudioEngine.play("menu")
-        AudioEngine.setChannelLoop(_channelID, true)
+    drawSettingsMenu() {
+        clearCanvasItems()
+        addCanvasItem(_background, 0, 0)
 
-        // Needs to be done manually once, to ensure that everything is set up.
-        draw(0)
+        // Create the functions used for the menu
+        var startPressed = Fn.new { drawMainMenu() }
+        var secondStartPressed = Fn.new { System.print("Hah, gotcha!") }
+        var quitPressed = Fn.new { Process.exit() }
+
+        // Construct the menu
+        _buttons = [
+            Button.new("res/start_button.png", startPressed, true),
+            Button.new("res/start_button.png", secondStartPressed, true),
+            Button.new("res/quit_button.png", quitPressed, true)
+        ]
+
+        var y = 300
+        for (button in _buttons) {
+            addCanvasItem(button, 400, y)
+            button.hover = Fn.new { addTempCanvasItem(_cursor, 295, button.getSize()[0].y + 10) }
+            y = y + 50
+        }
     }
 
     mouseHandler() {
