@@ -35,7 +35,7 @@ class Menu is Scene {
         // Construct the menu
         _buttons = [
             Button.new("res/start_button.png", startPressed, true),
-            Button.new("res/start_button.png", settingsPressed, true),
+            Button.new("res/start_button.png", settingsPressed, true), // Will become a settings button
             Button.new("res/quit_button.png", quitPressed, true)
         ]
 
@@ -68,7 +68,7 @@ class Menu is Scene {
         // Construct the menu
         _buttons = [
             Button.new("res/quit_button.png", mutePressed, true), // Will become a toggle mute button
-            Button.new("res/start_button.png", menuPressed, true)
+            Button.new("res/start_button.png", menuPressed, true) // Will become a back button
         ]
 
         var y = 300
