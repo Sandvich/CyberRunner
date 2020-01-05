@@ -1,4 +1,4 @@
-import "graphics" for ImageData, Point
+import "graphics" for ImageData, Point, Canvas
 // A set of common classes that we can use to make life easier
 
 class Sprite {
@@ -13,6 +13,8 @@ class Sprite {
     }
 
     sprite=(filename) { _sprite = ImageData.loadFromFile(filename) }
+    width { _sprite.width }
+    height { _sprite.height }
 
     draw (x, y) {
         if (_center) {
@@ -55,13 +57,23 @@ class Button is Sprite {
         _action.call()
     }
 
+    hover=(func) {
+        _hover = func
+    }
+
     onHover() {
-        System.print("Hovering!")
+        if (_hover != null) {
+            _hover.call()
+        } else {
+            System.print("Hovering!")
+        }
     }
 }
 
 class Scene {
-    // The core class for scenes. Will do nothing on its own, subclass it to create a scene.
+    // The core class for scenes. Will do little on its own, other than managing the
+    // draw loop.
+    // Subclass to create a scene.
 
     construct init() {}
 
@@ -71,6 +83,29 @@ class Scene {
         // it is freed automatically.
         return init()
     }
+
+    update() {
+        _tempDraw = []
+    }
+
+    draw(dt) {
+        Canvas.cls()
+        for (item in _toDraw) {
+            item[0].draw(item[1].x, item[1].y)
+        }
+        for (item in _tempDraw) {
+            item[0].draw(item[1].x, item[1].y)
+        }
+    }
+
+    setupDrawLoop() {
+        _toDraw = []
+        _tempDraw = []
+    }
+
+    addCanvasItem(item, x, y) { _toDraw.add([item, Point.new(x,y)]) }
+    addTempCanvasItem(item, x, y) { _tempDraw.add([item, Point.new(x,y)]) }
+    clearCanvasItems() { setupDrawLoop() } // Really just a convenience.
 
     mouseHandler() {}
     keyboardHandler() {}
