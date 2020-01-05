@@ -16,6 +16,7 @@ class Menu is Scene {
         AudioEngine.load("menu", "res/bluebeat.ogg")
         _channelID = AudioEngine.play("menu")
         AudioEngine.setChannelLoop(_channelID, true)
+        _mute = false
 
         // Needs to be done manually once, to ensure that everything is set up.
         drawMainMenu()
@@ -27,12 +28,14 @@ class Menu is Scene {
         addCanvasItem(_background, 0, 0)
 
         // Create the functions used for the menu
-        var startPressed = Fn.new { drawSettingsMenu() }
+        var startPressed = Fn.new { System.print("Starting game! Except not, because there's no game yet.") }
+        var settingsPressed = Fn.new { drawSettingsMenu() }
         var quitPressed = Fn.new { Process.exit() }
 
         // Construct the menu
         _buttons = [
             Button.new("res/start_button.png", startPressed, true),
+            Button.new("res/start_button.png", settingsPressed, true),
             Button.new("res/quit_button.png", quitPressed, true)
         ]
 
@@ -49,15 +52,23 @@ class Menu is Scene {
         addCanvasItem(_background, 0, 0)
 
         // Create the functions used for the menu
-        var startPressed = Fn.new { drawMainMenu() }
-        var secondStartPressed = Fn.new { System.print("Hah, gotcha!") }
-        var quitPressed = Fn.new { Process.exit() }
+        var mutePressed = Fn.new { 
+            if (AudioEngine.isPlaying(_channelID)) {
+                AudioEngine.stopAllChannels()
+                _mute = true
+            } else {
+                _channelID = AudioEngine.play("menu")
+                AudioEngine.setChannelLoop(_channelID, true)
+                _mute = false
+            }
+        }
+
+        var menuPressed = Fn.new { drawMainMenu() }
 
         // Construct the menu
         _buttons = [
-            Button.new("res/start_button.png", startPressed, true),
-            Button.new("res/start_button.png", secondStartPressed, true),
-            Button.new("res/quit_button.png", quitPressed, true)
+            Button.new("res/quit_button.png", mutePressed, true), // Will become a toggle mute button
+            Button.new("res/start_button.png", menuPressed, true)
         ]
 
         var y = 300
@@ -69,11 +80,16 @@ class Menu is Scene {
     }
 
     mouseHandler() {
+        // We use this pair of bools to ensure that a mouse click is only interpreted once
+        // Kinda like using the SDL MouseEvent stuff, but not as good
+        _mouseWasDown = _mouseIsDown
+        _mouseIsDown = Mouse.isButtonPressed("left")
+
         for (item in _buttons) {
             var size = item.getSize()
             if ( (size[0].x <= Mouse.x) && (size[0].y <= Mouse.y) && (size[1].x >= Mouse.x) && (size[1].y >= Mouse.y) ) {
                 item.onHover()
-                if (Mouse.isButtonPressed("left")) item.onClick()
+                if (_mouseIsDown && (!_mouseWasDown)) { item.onClick() }
             }
         }
     }
