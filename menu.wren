@@ -9,7 +9,8 @@ class Menu is Scene {
         _parent = parent
         // Set up the window and load in the files we need.
         setupDrawLoop()
-        _background = ImageData.loadFromFile("res/gridbg.png")
+        _background = Sprite.new("res/gridbg.png")
+        _title = Sprite.new("res/title.png", true)
         Canvas.resize(_background.width, _background.height)
         _cursor = Sprite.new("res/arrow.png", false)
 
@@ -25,33 +26,23 @@ class Menu is Scene {
     }
 
     drawMainMenu() {
-        clearCanvasItems()
-        addCanvasItem(_background, 0, 0)
-
         // Create the functions used for the menu
-        var startPressed = Fn.new { _parent.loadScene("Main game scene") }
+        var startPressed = Fn.new { _parent.loadScene("Game") }
         var settingsPressed = Fn.new { drawSettingsMenu() }
         var quitPressed = Fn.new { Process.exit() }
 
-        // Construct the menu
+        // Fill the button list
         _buttons = [
             Button.new("res/start_button.png", startPressed, true),
-            Button.new("res/start_button.png", settingsPressed, true), // Will become a settings button
+            Button.new("res/settings_button.png", settingsPressed, true),
             Button.new("res/quit_button.png", quitPressed, true)
         ]
 
-        var y = 300
-        for (button in _buttons) {
-            addCanvasItem(button, 400, y)
-            button.hover = Fn.new { addTempCanvasItem(_cursor, 295, button.getSize()[0].y + 10) }
-            y = y + 50
-        }
+        // This function does all work needed to draw a menu
+        drawMenuCommon()
     }
 
     drawSettingsMenu() {
-        clearCanvasItems()
-        addCanvasItem(_background, 0, 0)
-
         // Create the functions used for the menu
         var mutePressed = Fn.new { 
             if (AudioEngine.isPlaying(_channelID)) {
@@ -62,21 +53,39 @@ class Menu is Scene {
                 AudioEngine.setChannelLoop(_channelID, true)
                 _mute = false
             }
+            drawSettingsMenu()
         }
 
         var menuPressed = Fn.new { drawMainMenu() }
 
-        // Construct the menu
+        // Fill the button list
+        var mute_img
+        if (_mute) {
+            mute_img = "res/mute_active_button.png"
+        } else {
+            mute_img = "res/mute_button.png"
+        }
+
         _buttons = [
-            Button.new("res/quit_button.png", mutePressed, true), // Will become a toggle mute button
-            Button.new("res/start_button.png", menuPressed, true) // Will become a back button
+            Button.new(mute_img, mutePressed, true),
+            Button.new("res/back_button.png", menuPressed, true)
         ]
 
+        drawMenuCommon()
+    }
+
+    drawMenuCommon() {
+        // Clear everything, and then draw the background
+        clearCanvasItems()
+        addCanvasItem(_background, 0, 0)
+        addCanvasItem(_title, 400, 120)
+
+        // Draw the buttons that we currently want
         var y = 300
         for (button in _buttons) {
             addCanvasItem(button, 400, y)
-            button.hover = Fn.new { addTempCanvasItem(_cursor, 295, button.getSize()[0].y + 10) }
-            y = y + 50
+            button.hover = Fn.new { addTempCanvasItem(_cursor, 265, button.getSize()[0].y + 15) }
+            y = y + 75
         }
     }
 

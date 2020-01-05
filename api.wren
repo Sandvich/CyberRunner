@@ -13,6 +13,8 @@ class Sprite {
     }
 
     sprite=(filename) { _sprite = ImageData.loadFromFile(filename) }
+    width { _sprite.width }
+    height { _sprite.height }
 
     draw (x, y) {
         if (_center) {

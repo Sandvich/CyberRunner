@@ -31,7 +31,7 @@ class Game {
     }
 
     static loadScene(sceneClass) {
-        System.print("Tried to load %(sceneClass)!")
+        System.print("Tried to load %(sceneClass) Scene!")
         if (sceneClass is Class) {
             __currentScreen = sceneClass.run(this)
         }
