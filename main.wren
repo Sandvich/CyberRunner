@@ -20,6 +20,7 @@ class Game {
     }
 
     static update() {
+        __currentScreen.update()
         __currentScreen.mouseHandler()
         __currentScreen.keyboardHandler()
         __currentScreen.gamepadHandler()

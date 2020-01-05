@@ -82,22 +82,23 @@ class Scene {
         return init()
     }
 
+    update() {
+        _tempDraw = []
+    }
+
     draw(dt) {
         Canvas.cls()
         for (item in _toDraw) {
             item[0].draw(item[1].x, item[1].y)
         }
-        for (item in _tempDraw + _secondDraw) {
+        for (item in _tempDraw) {
             item[0].draw(item[1].x, item[1].y)
         }
-        _secondDraw = _tempDraw
-        _tempDraw = []
     }
 
     setupDrawLoop() {
         _toDraw = []
         _tempDraw = []
-        _secondDraw = []
     }
 
     addCanvasItem(item, x, y) { _toDraw.add([item, Point.new(x,y)]) }
