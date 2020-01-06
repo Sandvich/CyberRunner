@@ -32,7 +32,6 @@ class Game {
     }
 
     static loadScene(sceneClass) {
-        System.print("Tried to load %(sceneClass) Scene!")
         if (sceneClass is Class) {
             __currentScreen = sceneClass.run(this)
         }
@@ -46,7 +45,6 @@ class Game {
         loadFiber.try()
 
         if (loaded == null) { // Give a default set of prefs
-            System.print("Couldn't find save file")
             return {
             "mute": 0,
             "volume": 1.0,
@@ -54,7 +52,6 @@ class Game {
             "high": 0
             }
         } else { // Parse the string we loaded
-            System.print("Loading file: %(loaded)")
             var listString = loaded.split("\n")
             var prefs = {}
             for (item in listString) {
