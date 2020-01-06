@@ -33,6 +33,7 @@ class GameLevel is Scene {
 		addTempCanvasItem(CanvasString.new("%(_score)"), 125, 10)
 
 		// Update the player
+		_player.mouseHandler()
 		_player.update()
 		addTempCanvasItem(_player, _player.x, _player.y)
 	}
