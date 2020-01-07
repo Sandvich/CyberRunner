@@ -37,6 +37,12 @@ class Game {
 		}
 	}
 
+	static loadScene(sceneClass, args) {
+		if (sceneClass is Class) {
+			__currentScreen = sceneClass.run(this, args)
+		}
+	}
+
 	static loadPrefs() {
 		var loaded = null
 		var loadFiber = Fiber.new {

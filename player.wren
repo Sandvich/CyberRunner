@@ -30,7 +30,10 @@ class Player is Sprite {
 		_mouseWasDown = _mouseIsDown
 		_mouseIsDown = Mouse.isButtonPressed("left")
 		// If the player has just clicked, then... We...
-		if (_mouseIsDown && (!_mouseWasDown)) { teleport() }
+		if (_mouseIsDown && (!_mouseWasDown)) {
+			_lastTeleport = _teleportMovement
+			teleport()
+		}
 		// TELEPORT!
 	}
 
@@ -44,8 +47,15 @@ class Player is Sprite {
 		// Keep going with the teleport if it's ongoing
 		if (_lastTeleport != _teleportMovement) { teleport() }
 		if (_lastTeleport < 1) {
-			_lastTeleport = _teleportMovement
 			_collide = true
+		}
+	}
+
+	isDead() {
+		if ( _loc.x > (Canvas.width * 2 / 3 )) {
+			return true
+		} else {
+			return false
 		}
 	}
 

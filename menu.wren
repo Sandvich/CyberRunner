@@ -8,6 +8,7 @@ import "./game" for GameLevel
 class Menu is Scene {
 	construct init (parent) {
 		_parent = parent
+		_prefs = parent.loadPrefs()
 		AudioEngine.stopAllChannels()
 
 		// Set up the window and load in the files we need.
@@ -16,7 +17,6 @@ class Menu is Scene {
 		_title = Sprite.new("res/title.png", true)
 		Canvas.resize(_background.width, _background.height)
 		_cursor = Sprite.new("res/arrow.png", false)
-		_prefs = parent.loadPrefs()
 
 		// Load and play the background music
 		AudioEngine.load("menu", "res/bluebeat.ogg")

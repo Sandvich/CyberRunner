@@ -1,4 +1,4 @@
-import "graphics" for ImageData, Point, Canvas
+import "graphics" for ImageData, Point, Canvas, Color
 // A set of common classes that we can use to make life easier
 
 class Sprite {
@@ -110,4 +110,14 @@ class Scene {
 	mouseHandler() {}
 	keyboardHandler() {}
 	gamepadHandler() {}
+}
+
+class CanvasString {
+	construct new(string) {
+		_string = string
+	}
+
+	draw(x, y) {
+		Canvas.print(_string, x, y, Color.white)
+	}
 }
