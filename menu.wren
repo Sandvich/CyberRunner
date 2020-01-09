@@ -3,13 +3,13 @@ import "dome" for Process
 import "graphics" for Canvas, ImageData
 import "input" for Mouse
 import "./api" for Sprite, Button, Scene
-import "./game" for GameLevel
 
 class Menu is Scene {
 	construct init (parent) {
 		_parent = parent
 		_prefs = parent.loadPrefs()
 		AudioEngine.stopAllChannels()
+		_mouseIsDown = true
 
 		// Set up the window and load in the files we need.
 		setupDrawLoop()
@@ -32,7 +32,7 @@ class Menu is Scene {
 
 	drawMainMenu() {
 		// Create the functions used for the menu
-		var startPressed = Fn.new { _parent.loadScene(GameLevel) }
+		var startPressed = Fn.new { _parent.loadScene("game") }
 		var settingsPressed = Fn.new { drawSettingsMenu() }
 		var quitPressed = Fn.new { Process.exit() }
 

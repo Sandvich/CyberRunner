@@ -2,7 +2,6 @@ import "audio" for AudioEngine
 import "dome" for Process
 import "graphics" for Canvas, Color
 import "./api" for Scene, CanvasString
-import "./gameover" for GameOver
 import "./player" for Player
 
 class GameLevel is Scene {
@@ -35,16 +34,14 @@ class GameLevel is Scene {
 		addTempCanvasItem(CanvasString.new("%(_score)"), 125, 10)
 
 		// Update the player
-		_player.mouseHandler()
 		_player.update()
 		addTempCanvasItem(_player, _player.x, _player.y)
 
 		// Check for game over
-		if (_player.isDead()) {
-			System.print("You're dead!\nYour score: %(_score)")
-			_parent.loadScene(GameOver, [_score])
-		}
+		if (_player.isDead()) { _parent.loadScene("gameover", [_score]) }
 	}
+
+	mouseHandler() { _player.mouseHandler() }
 
 	// Boilerplate + functions
 	static run(parent) {

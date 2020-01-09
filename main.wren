@@ -1,7 +1,11 @@
 import "audio" for AudioEngine
 import "dome" for Window
 import "io" for FileSystem
+
+// Load in all scenes
 import "./menu" for Menu
+import "./game" for GameLevel
+import "./gameover" for GameOver
 
 // =================
 //  GAME CODE BELOW
@@ -16,8 +20,15 @@ class Game {
 		Window.lockstep = true
 		Window.resize(800, 600)
 
+		// Load scenes into a dict
+		__scenes = {
+			"menu": Menu,
+			"game": GameLevel,
+			"gameover": GameOver
+		}
+
 		// Open the menu
-		__currentScreen = Menu.run(this)
+		loadScene("menu")
 	}
 
 	static update() {
@@ -32,15 +43,12 @@ class Game {
 	}
 
 	static loadScene(sceneClass) {
-		if (sceneClass is Class) {
-			__currentScreen = sceneClass.run(this)
-		}
+		System.print("Trying to load %(sceneClass)")
+		if (__scenes.containsKey(sceneClass)) { __currentScreen = __scenes[sceneClass].run(this) }
 	}
 
 	static loadScene(sceneClass, args) {
-		if (sceneClass is Class) {
-			__currentScreen = sceneClass.run(this, args)
-		}
+		if (__scenes.containsKey(sceneClass)) { __currentScreen = __scenes[sceneClass].run(this, args) }
 	}
 
 	static loadPrefs() {
