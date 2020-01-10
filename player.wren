@@ -64,7 +64,6 @@ class Player is AnimatedSprite {
 			var coords = getSize()
 			for (object in colliders) {
 				var colliderLoc = object.getSize()
-				System.print("Enemy co-ords: %(colliderLoc)")
 				if (coords[0].x < colliderLoc[0].x + colliderLoc[1].x &&
 					coords[0].x + coords[1].x > colliderLoc[0].x &&
 					coords[0].y < colliderLoc[0].y + colliderLoc[1].y &&
@@ -78,4 +77,8 @@ class Player is AnimatedSprite {
 
 	x { _loc.x }
 	y { _loc.y }
+
+	getSize() {
+		return [_loc + Point.new(34, 17), Point.new(16, 44)]
+	}
 }
