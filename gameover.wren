@@ -21,12 +21,12 @@ class GameOver is Scene {
 		// Draw items
 		setupDrawLoop()
 		addCanvasItem(Sprite.new("res/gameover.png", true), 400, 100)
-		addCanvasItem(CanvasString.new("You scored: %(_score)"), 250, 200)
-		addCanvasItem(CanvasString.new("Your high score: %(_prefs["high"])"), 250, 225)
+		addCanvasItem(CanvasString.new("You scored: %(_score)", true), 400, 300)
+		addCanvasItem(CanvasString.new("Your high score: %(_prefs["high"])", true), 400, 325)
 		if (_newHigh) {
 			addCanvasItem(Sprite.new("res/highscore.png", true), 400, 450)
 		}
-		addCanvasItem(CanvasString.new("Click anywhere to return to the main screen."), 240, 500)
+		addCanvasItem(CanvasString.new("Click anywhere to return to the main screen.", true), 400, 500)
 
 		draw(0)
 	}

@@ -115,9 +115,18 @@ class Scene {
 class CanvasString {
 	construct new(string) {
 		_string = string
+		_center = false
+	}
+	construct new(string, center) {
+		_string = string
+		_center = center
 	}
 
 	draw(x, y) {
+		if (_center) {
+			x = x - (4 * _string.count)
+			// Imperfect, but we shouldn't be using any multi-byte characters
+		}
 		Canvas.print(_string, x, y, Color.white)
 	}
 }
