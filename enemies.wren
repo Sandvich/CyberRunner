@@ -26,8 +26,10 @@ class Enemy is Sprite {
 class EnemySpawner {
 	construct new(difficulty) {
 		_enemies = []
-		_difficulty = 0.01 + 0.02 * difficulty
+		_difficulty = 0.025 + 0.025 * difficulty
 		_num = Random.new()
+		_lineAllowed = 0
+		_maxLineAllowed = 10 - difficulty
 	}
 
 	update(scene) {
@@ -36,8 +38,19 @@ class EnemySpawner {
 			scene.addTempCanvasItem(item, item.x, item.y)
 		}
 		
-		if (_num.float() < _difficulty) {
+		var check = _num.float()
+		if (check <= _difficulty) {
 			_enemies.add(Enemy.new(_num.int(20, 580)))
+		}
+		if (check >= 0.995) {
+			if (_lineAllowed == 0) {
+				for (i in 10..570) {
+					_enemies.add(Enemy.new(i))
+				}
+				_lineAllowed = _maxLineAllowed
+			} else {
+				_lineAllowed = _lineAllowed - 1
+			}
 		}
 	}
 
