@@ -1,20 +1,24 @@
 import "graphics" for Canvas, Color, Point
 import "input" for Mouse
-import "./api" for Sprite
+import "./api" for AnimatedSprite
 
-class Player is Sprite {
+class Player is AnimatedSprite {
 	construct new() {
 		_loc = Point.new(10, 300)
-		_radius = 5
-		_color = Color.white
 		_lastMove = 0
 		_teleportMovement = 10
 		_lastTeleport = 10
 		_collide = true
-	}
 
-	draw(x, y) {
-		Canvas.ellipsefill(x - _radius, y - _radius, x + _radius, y + _radius, _color)
+		_center = true
+		setAnimation(["res/run-1.png",
+						"res/run-2.png",
+						"res/run-3.png",
+						"res/run-4.png",
+						"res/run-5.png",
+						"res/run-6.png",
+						"res/run-7.png",
+						"res/run-8.png"])
 	}
 
 	mouseHandler() {
@@ -44,6 +48,7 @@ class Player is Sprite {
 	}
 
 	update() {
+		super()
 		// Keep going with the teleport if it's ongoing
 		if (_lastTeleport != _teleportMovement) { teleport() }
 		if (_lastTeleport < 1) {

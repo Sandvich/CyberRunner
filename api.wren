@@ -182,3 +182,40 @@ class Fading {
 	static isPlaying(channelID) { AudioEngine.isPlaying(channelID) }
 	static stopAllChannels() { AudioEngine.stopAllChannels() }
 }
+
+class AnimatedSprite is Sprite {
+	construct new(filenames, center) {
+		_center = center
+		setAnimation(filenames)
+	}
+
+	construct new(filenames) {
+		_center = false
+		setAnimation(filenames)
+	}
+
+	setAnimation(filenames) {
+		_count = 0
+		speed = 5
+		_frameNumber = 0
+		_animationFrames = []
+		for (file in filenames) {
+			_animationFrames.add(Sprite.new(file, _center))
+		}
+	}
+
+	draw(x,y) {
+		_animationFrames[_frameNumber].draw(x,y)
+	}
+
+	speed=(speed) { _speed = speed }
+	getSpeed { _speed }
+	update() {
+		_count = _count + 1
+		if (_count == getSpeed) {
+			_frameNumber=_frameNumber+1
+			if (_frameNumber == _animationFrames.count) { _frameNumber = 0 }
+			_count = 0
+		}
+	}
+}

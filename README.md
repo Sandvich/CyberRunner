@@ -18,6 +18,7 @@ If you're running Windows, the SDL library is bundled with the dome executable, 
 * [Menu Music](https://opengameart.org/content/bluebeat-01-loop-cyberpunk-lab-music)
 * [Main Music](https://opengameart.org/content/endless-cyber-runner-looping)
 * [Main Background](https://zeptobars.com/en/read/how-to-open-microchip-asic-what-inside)
+* [Player Avatar](https://opengameart.org/content/warped-city)
 
 \* Steps to recreate this text:
 1. All caps
