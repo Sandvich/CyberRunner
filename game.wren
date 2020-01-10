@@ -1,25 +1,24 @@
-import "audio" for AudioEngine
 import "dome" for Process
 import "graphics" for Canvas, Color
-import "./api" for Scene, CanvasString
+import "./api" for CanvasString, Fading, Scene, Sprite
 import "./player" for Player
 
 class GameLevel is Scene {
 	construct init(parent) {
 		_parent = parent
-		AudioEngine.stopAllChannels()
 
 		// Load in the background and HUD
 		setupDrawLoop()
+		_background = Sprite.new("res/level_bg.jpg")
+		_bgOffset = 0
+		addTempCanvasItem(_background, _bgOffset, 0)
 		addCanvasItem(CanvasString.new("Current Score:"), 10, 10)
 		_score = 0
 		_prefs = _parent.loadPrefs()
 
 		// Set up audio
-		AudioEngine.load("bg", "res/cyberrunner.ogg")
 		if (!_prefs["mute"]) {
-			_channelID = AudioEngine.play("bg")
-			AudioEngine.setChannelLoop(_channelID, true)
+			_channelID = Fading.play("cyberrunner")
 		}
 
 		// Add the player
@@ -30,6 +29,11 @@ class GameLevel is Scene {
 
 	update() {
 		super()
+		// Background and Score
+		_bgOffset = _bgOffset - 2
+		if (_bgOffset + _background.width < 0) { _bgOffset = _bgOffset + _background.width }
+		addTempCanvasItem(_background, _bgOffset, 0)
+		addTempCanvasItem(_background, _bgOffset+_background.width, 0)
 		_score = _score + 1
 		addTempCanvasItem(CanvasString.new("%(_score)"), 125, 10)
 
@@ -38,7 +42,7 @@ class GameLevel is Scene {
 		addTempCanvasItem(_player, _player.x, _player.y)
 
 		// Check for game over
-		if (_player.isDead()) { _parent.loadScene("gameover", [_score]) }
+		if (_player.isDead()) { _parent.loadScene("gameover", [_score, _channelID]) }
 	}
 
 	mouseHandler() { _player.mouseHandler() }

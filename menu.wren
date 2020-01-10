@@ -1,14 +1,12 @@
-import "audio" for AudioEngine
 import "dome" for Process
 import "graphics" for Canvas, ImageData
 import "input" for Mouse
-import "./api" for Sprite, Button, Scene
+import "./api" for Button, Fading, Scene, Sprite
 
 class Menu is Scene {
 	construct init (parent) {
 		_parent = parent
 		_prefs = parent.loadPrefs()
-		AudioEngine.stopAllChannels()
 		_mouseIsDown = true
 
 		// Set up the window and load in the files we need.
@@ -19,11 +17,7 @@ class Menu is Scene {
 		_cursor = Sprite.new("res/arrow.png", false)
 
 		// Load and play the background music
-		AudioEngine.load("menu", "res/bluebeat.ogg")
-		if (!_prefs["mute"]) {
-			_channelID = AudioEngine.play("menu")
-			AudioEngine.setChannelLoop(_channelID, true)
-		}
+		if (!_prefs["mute"]) { _channelID = Fading.play("bluebeat") }
 
 		// Needs to be done manually once, to ensure that everything is set up.
 		drawMainMenu()
@@ -32,7 +26,10 @@ class Menu is Scene {
 
 	drawMainMenu() {
 		// Create the functions used for the menu
-		var startPressed = Fn.new { _parent.loadScene("game") }
+		var startPressed = Fn.new {
+			Fading.stop(_channelID)
+			_parent.loadScene("game")
+		}
 		var settingsPressed = Fn.new { drawSettingsMenu() }
 		var quitPressed = Fn.new { Process.exit() }
 
@@ -50,12 +47,11 @@ class Menu is Scene {
 	drawSettingsMenu() {
 		// Create the functions used for the menu
 		var mutePressed = Fn.new { 
-			if (AudioEngine.isPlaying(_channelID)) {
-				AudioEngine.stopAllChannels()
+			if (Fading.isPlaying(_channelID)) {
+				Fading.stopAllChannels()
 				_prefs["mute"] = true
 			} else {
-				_channelID = AudioEngine.play("menu")
-				AudioEngine.setChannelLoop(_channelID, true)
+				_channelID = Fading.play("bluebeat")
 				_prefs["mute"] = false
 			}
 			_parent.savePrefs(_prefs)

@@ -1,15 +1,14 @@
-import "audio" for AudioEngine
 import "input" for Mouse
-import "./api" for Scene, Sprite, CanvasString
+import "./api" for CanvasString, Fading, Scene, Sprite
 
 class GameOver is Scene {
 	construct init(parent, args) {
 		_parent = parent
 		_score = args[0]
+		_channelID = args[1]
 		_prefs = _parent.loadPrefs()
 		_newHigh = false
 		_clicked = true
-		AudioEngine.stopAllChannels()
 
 		// Work out if _score is our highscore
 		if (_score > _prefs["high"]) {
@@ -33,7 +32,10 @@ class GameOver is Scene {
 
 	mouseHandler() {
 		if (Mouse.isButtonPressed("left")) {
-			if (!_clicked) { _parent.loadScene("menu") }
+			if (!_clicked) {
+				Fading.stop(_channelID)
+				_parent.loadScene("menu")
+			}
 		} else {
 			_clicked = false
 		}

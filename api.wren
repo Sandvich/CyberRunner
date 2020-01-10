@@ -1,4 +1,5 @@
 import "graphics" for ImageData, Point, Canvas, Color
+import "audio" for AudioEngine
 // A set of common classes that we can use to make life easier
 
 class Sprite {
@@ -129,4 +130,55 @@ class CanvasString {
 		}
 		Canvas.print(_string, x, y, Color.white)
 	}
+}
+
+class Fading {
+	static init() {
+		AudioEngine.load("bluebeat", "res/bluebeat.ogg")
+		AudioEngine.load("cyberrunner", "res/cyberrunner.ogg")
+		__fadeIn = []
+		__fadeOut = []
+		System.print("Initialised Audio Engine")
+	}
+
+	static play(trackname) {
+		var channelID = AudioEngine.play(trackname, 0, true)
+		System.print("Now fading in %(trackname) on channel %(channelID)")
+		__fadeIn.add(channelID)
+		__fadeIn.add(0)
+		return __fadeIn[0]
+	}
+
+	static stop(channelID) {
+		System.print("Now fading out channel %(channelID)")
+		__fadeOut.add(channelID)
+		if (__fadeIn[0] == channelID) {
+			__fadeOut.add(__fadeIn[1])
+			__fadeIn = []
+		} else {
+			__fadeOut.add(1)
+		}
+	}
+
+	static update() {
+		if (__fadeIn.count > 0) {
+			__fadeIn[1] = __fadeIn[1] + 0.01
+			AudioEngine.setChannelVolume(__fadeIn[0], __fadeIn[1])
+			if (__fadeIn[1] >= 1.0) {
+				__fadeIn = []
+			}
+		}
+
+		if (__fadeOut.count > 0) {
+			__fadeOut[1] = __fadeOut[1] - 0.01
+			AudioEngine.setChannelVolume(__fadeOut[0], __fadeOut[1])
+			if (__fadeOut[1] == 0) {
+				AudioEngine.stopChannel(__fadeOut[0])
+				__fadeOut = []
+			}
+		}
+	}
+
+	static isPlaying(channelID) { AudioEngine.isPlaying(channelID) }
+	static stopAllChannels() { AudioEngine.stopAllChannels() }
 }

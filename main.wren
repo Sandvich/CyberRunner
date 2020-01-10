@@ -1,7 +1,6 @@
-import "audio" for AudioEngine
 import "dome" for Window
 import "io" for FileSystem
-
+import "./api" for Fading
 // Load in all scenes
 import "./menu" for Menu
 import "./game" for GameLevel
@@ -27,11 +26,15 @@ class Game {
 			"gameover": GameOver
 		}
 
+		// Initialise the Audio
+		Fading.init()
+
 		// Open the menu
 		loadScene("menu")
 	}
 
 	static update() {
+		Fading.update()
 		__currentScreen.update()
 		__currentScreen.mouseHandler()
 		__currentScreen.keyboardHandler()
