@@ -27,8 +27,8 @@ class Player is AnimatedSprite {
 		_loc.y = _loc.y + _lastMove
 
 		// Set boundaries
-		if (_loc.y < 30) (_loc.y = 30)
-		if (_loc.y > 580) (_loc.y = 580)
+		if (_loc.y < 20) (_loc.y = 20)
+		if (_loc.y > 520) (_loc.y = 520)
 
 		// Check for a click, like with the menu
 		_mouseWasDown = _mouseIsDown
@@ -56,12 +56,24 @@ class Player is AnimatedSprite {
 		}
 	}
 
-	isDead() {
+	isDead(colliders) {
 		if ( _loc.x > (Canvas.width * 2 / 3 )) {
 			return true
-		} else {
-			return false
 		}
+		if (_collide) {
+			var coords = getSize()
+			for (object in colliders) {
+				var colliderLoc = object.getSize()
+				System.print("Enemy co-ords: %(colliderLoc)")
+				if (coords[0].x < colliderLoc[0].x + colliderLoc[1].x &&
+					coords[0].x + coords[1].x > colliderLoc[0].x &&
+					coords[0].y < colliderLoc[0].y + colliderLoc[1].y &&
+					coords[0].y + coords[1].y > colliderLoc[0].y) {
+						return true
+					}
+			}
+		}
+		return false
 	}
 
 	x { _loc.x }

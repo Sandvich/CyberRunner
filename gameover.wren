@@ -5,7 +5,6 @@ class GameOver is Scene {
 	construct init(parent, args) {
 		_parent = parent
 		_score = args[0]
-		_channelID = args[1]
 		_prefs = _parent.loadPrefs()
 		_newHigh = false
 		_clicked = true
@@ -33,7 +32,6 @@ class GameOver is Scene {
 	mouseHandler() {
 		if (Mouse.isButtonPressed("left")) {
 			if (!_clicked) {
-				Fading.stop(_channelID)
 				_parent.loadScene("menu")
 			}
 		} else {

@@ -152,7 +152,7 @@ class Fading {
 	static stop(channelID) {
 		System.print("Now fading out channel %(channelID)")
 		__fadeOut.add(channelID)
-		if (__fadeIn[0] == channelID) {
+		if (__fadeIn.count > 0 && __fadeIn[0] == channelID) {
 			__fadeOut.add(__fadeIn[1])
 			__fadeIn = []
 		} else {
@@ -172,7 +172,8 @@ class Fading {
 		if (__fadeOut.count > 0) {
 			__fadeOut[1] = __fadeOut[1] - 0.01
 			AudioEngine.setChannelVolume(__fadeOut[0], __fadeOut[1])
-			if (__fadeOut[1] == 0) {
+			System.print("Volume at: %(__fadeOut[1])")
+			if (__fadeOut[1] <= 0) {
 				AudioEngine.stopChannel(__fadeOut[0])
 				__fadeOut = []
 			}
@@ -206,6 +207,7 @@ class AnimatedSprite is Sprite {
 
 	draw(x,y) {
 		_animationFrames[_frameNumber].draw(x,y)
+		_loc = Point.new(x, y)
 	}
 
 	speed=(speed) { _speed = speed }
@@ -216,6 +218,12 @@ class AnimatedSprite is Sprite {
 			_frameNumber=_frameNumber+1
 			if (_frameNumber == _animationFrames.count) { _frameNumber = 0 }
 			_count = 0
+		}
+	}
+
+	getSize() {
+		if (_loc != null) {
+			return [_loc, Point.new(_loc.x + _animationFrames[_frameNumber].width, _loc.y + _animationFrames[_frameNumber].height)]
 		}
 	}
 }
