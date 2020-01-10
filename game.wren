@@ -45,6 +45,7 @@ class GameLevel is Scene {
 		addTempCanvasItem(_player, _player.x, _player.y)
 		for (enemy in _enemies) {
 			enemy.update()
+			addTempCanvasItem(enemy, enemy.x, enemy.y)
 		}
 
 		// Check for game over
@@ -76,4 +77,6 @@ class Enemy is Sprite {
 	}
 
 	getSize() { [_loc, Point.new(20, 20)] }
+	x { _loc.x }
+	y { _loc.y }
 }
