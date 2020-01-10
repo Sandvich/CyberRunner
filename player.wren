@@ -47,13 +47,14 @@ class Player is AnimatedSprite {
 		_loc.x = _loc.x + _lastTeleport
 	}
 
-	update() {
+	update(parent) {
 		super()
 		// Keep going with the teleport if it's ongoing
 		if (_lastTeleport != _teleportMovement) { teleport() }
 		if (_lastTeleport < 1) {
 			_collide = true
 		}
+		parent.addTempCanvasItem(this, x, y)
 	}
 
 	isDead(colliders) {

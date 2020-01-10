@@ -2,6 +2,7 @@ import "dome" for Process
 import "graphics" for Canvas, Color, Point
 import "./api" for CanvasString, Fading, Scene, Sprite
 import "./player" for Player
+import "./enemies" for EnemySpawner
 
 class GameLevel is Scene {
 	construct init(parent) {
@@ -24,8 +25,7 @@ class GameLevel is Scene {
 		// Add the player and a list to track the enemies
 		_player = Player.new()
 		addTempCanvasItem(_player, _player.x, _player.y)
-		_enemies = []
-		_enemies.add(Enemy.new(300))
+		_spawn = EnemySpawner.new(_prefs["difficulty"])
 
 		draw(0)
 	}
@@ -41,15 +41,11 @@ class GameLevel is Scene {
 		addTempCanvasItem(CanvasString.new("%(_score)"), 125, 10)
 
 		// Update the player
-		_player.update()
-		addTempCanvasItem(_player, _player.x, _player.y)
-		for (enemy in _enemies) {
-			enemy.update()
-			addTempCanvasItem(enemy, enemy.x, enemy.y)
-		}
+		_player.update(this)
+		_spawn.update(this)
 
 		// Check for game over
-		if (_player.isDead(_enemies)) {
+		if (_player.isDead(_spawn.enemyList)) {
 			Fading.stop(_channelID)
 			_parent.loadScene("gameover", [_score])
 		}
@@ -61,22 +57,4 @@ class GameLevel is Scene {
 	static run(parent) {
 		return init(parent)
 	}
-}
-
-class Enemy is Sprite {
-	construct new(y) {
-		_loc = Point.new(800, y)
-	}
-
-	draw(x, y) {
-		Canvas.rectfill(x, y, 20, 20, Color.red)
-	}
-
-	update() {
-		_loc = Point.new(_loc.x - 2, _loc.y)
-	}
-
-	getSize() { [_loc, Point.new(20, 20)] }
-	x { _loc.x }
-	y { _loc.y }
 }
