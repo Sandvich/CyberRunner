@@ -12,11 +12,28 @@ class Enemy is Sprite {
 		Canvas.rectfill(x, y, 20, 20, Color.red)
 	}
 
-	update() {
-		_loc = Point.new(_loc.x - 2, _loc.y)
+	getSize() { [_loc, Point.new(20, 20)] }
+	x { _loc.x }
+	y { _loc.y }
+
+	loc=(location) {_loc = location}
+}
+
+class Firewall is Enemy {
+	construct new() {
+		_loc = Point.new(800, 20)
+		_sprite = Sprite.new("res/firewall.png", true)
 	}
 
-	getSize() { [_loc, Point.new(20, 20)] }
+	draw(x, y) {
+		var count = 0
+		while (count <= 600) {
+			_sprite.draw(x, count)
+			count = count + 20
+		}
+	}
+
+	getSize() { [_loc, Point.new(20, 570)] }
 	x { _loc.x }
 	y { _loc.y }
 
@@ -44,9 +61,7 @@ class EnemySpawner {
 		}
 		if (check >= 0.995) {
 			if (_lineAllowed == 0) {
-				for (i in 10..570) {
-					_enemies.add(Enemy.new(i))
-				}
+				_enemies.add(Firewall.new())
 				_lineAllowed = _maxLineAllowed
 			} else {
 				_lineAllowed = _lineAllowed - 1

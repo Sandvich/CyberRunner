@@ -19,6 +19,7 @@ If you're running Windows, the SDL library is bundled with the dome executable, 
 * [Main Music](https://opengameart.org/content/endless-cyber-runner-looping)
 * [Main Background](https://zeptobars.com/en/read/how-to-open-microchip-asic-what-inside)
 * [Player Avatar](https://opengameart.org/content/warped-city)
+* [Firewall](https://opengameart.org/content/pixel-art-flame-icon)
 
 \* Steps to recreate this text:
 1. All caps
