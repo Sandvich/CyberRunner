@@ -160,18 +160,16 @@ class Fading {
 
 	static update() {
 		if (__fadeIn.count > 0) {
-			__fadeIn[1] = __fadeIn[1] + 0.01
-			AudioEngine.setChannelVolume(__fadeIn[0], __fadeIn[1])
-			if (__fadeIn[1] >= 1.0) {
+			__fadeIn[0].volume = __fadeIn[0].volume + 0.01
+			if (__fadeIn[0].volume >= 1.0) {
 				__fadeIn = []
 			}
 		}
 
 		if (__fadeOut.count > 0) {
-			__fadeOut[1] = __fadeOut[1] - 0.01
-			AudioEngine.setChannelVolume(__fadeOut[0], __fadeOut[1])
-			if (__fadeOut[1] <= 0) {
-				AudioEngine.stopChannel(__fadeOut[0])
+			__fadeOut[0].volume = __fadeOut[0].volume - 0.01
+			if (__fadeOut[0].volume <= 0) {
+        __fadeOut[0].stop()
 				__fadeOut = []
 			}
 		}
